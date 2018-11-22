@@ -1,0 +1,1 @@
+gradle run -PappArgs="['-m', 'e', '-f', 'lorem', '-o', 'ouput', '-c', 'R']"

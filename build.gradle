@@ -24,7 +24,24 @@ task fatJar(type: Jar) {
                 'Implementation-Version': version,
                 'Main-Class': 'App'
     }
-    baseName = project.name + '-all'
+    baseName = project.name + '-complete'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+}
+
+task copyJar(type: Copy) {
+    from file("${buildDir}/libs/${project.name}-complete-${version}.jar")
+    into file("${projectDir}")
+}
+
+task superBuild(dependsOn: ['clean', 'build', 'fatJar', 'copyJar']){
+    build.mustRunAfter clean
+    fatJar.mustRunAfter build
+    copyJar.mustRunAfter fatJar
+}
+
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
 }

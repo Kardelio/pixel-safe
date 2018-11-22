@@ -6,6 +6,8 @@ encrypt-text-in-image.iws
 encrypt-text-in-image.iml
 encrypt-text-in-image.ipr
 
+encrypt-text-in-image-complete-*.jar
+
 loremPic.png
 resultDecrypt.txt
 lorkey.key
