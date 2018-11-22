@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+version = '1.0'
+
+dependencies {
+    compile 'com.google.guava:guava:20.0'
+    compile 'commons-cli:commons-cli:1.4'
+
+    testCompile 'junit:junit:4.12'
+}
+
+mainClassName = 'App'
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Encrypt files into images and back again',
+                'Implementation-Version': version,
+                'Main-Class': 'App'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

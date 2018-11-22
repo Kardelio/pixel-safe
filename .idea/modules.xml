@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/encrypt-text-in-image.iml" filepath="$PROJECT_DIR$/encrypt-text-in-image.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/encrypt-text-in-image_main.iml" filepath="$PROJECT_DIR$/.idea/modules/encrypt-text-in-image_main.iml" group="encrypt-text-in-image" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/encrypt-text-in-image_test.iml" filepath="$PROJECT_DIR$/.idea/modules/encrypt-text-in-image_test.iml" group="encrypt-text-in-image" />
+    </modules>
+  </component>
+</project>

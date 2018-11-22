@@ -1,0 +1,11 @@
+build
+out
+.gradle
+
+encrypt-text-in-image.iws
+encrypt-text-in-image.iml
+encrypt-text-in-image.ipr
+
+loremPic.png
+resultDecrypt.txt
+lorkey.key
