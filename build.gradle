@@ -51,13 +51,13 @@ task fatJar(type: Jar) {
                 'Implementation-Version': version,
                 'Main-Class': 'App'
     }
-    baseName = project.name + '-complete'
+    baseName = project.name + ''
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 
 task copyJar(type: Copy) {
-    from file("${buildDir}/libs/${project.name}-complete-${version}.jar")
+    from file("${buildDir}/libs/${project.name}-${version}.jar")
     into file("${projectDir}/example")
 }
 
