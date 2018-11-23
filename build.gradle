@@ -9,6 +9,33 @@ repositories {
 
 version = '1.0'
 
+def getVersionCode = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', '--count', 'head'
+            standardOutput = stdout
+        }
+        return Integer.parseInt(stdout.toString().trim())
+    }
+    catch (ignored) {
+        return -1
+    }
+}
+
+static def getGitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
+}
+
+println "####### Build Data #######"
+println "======> Version: " + getVersionCode()
+println "======> Branch: " + getGitBranch()
+
 dependencies {
     compile 'com.google.guava:guava:20.0'
     compile 'commons-cli:commons-cli:1.4'
@@ -31,7 +58,7 @@ task fatJar(type: Jar) {
 
 task copyJar(type: Copy) {
     from file("${buildDir}/libs/${project.name}-complete-${version}.jar")
-    into file("${projectDir}")
+    into file("${projectDir}/example")
 }
 
 task superBuild(dependsOn: ['clean', 'build', 'fatJar', 'copyJar']){
