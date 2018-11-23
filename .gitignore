@@ -2,11 +2,11 @@ build
 out
 .gradle
 
-encrypt-text-in-image.iws
-encrypt-text-in-image.iml
-encrypt-text-in-image.ipr
+pixel-safe.iws
+pixel-safe.iml
+pixel-safe.ipr
 
-example/encrypt-text-in-image-complete-*.jar
+example/pixel-safe-complete-*.jar
 
 loremPic.png
 resultDecrypt.txt

@@ -13,6 +13,7 @@ public class OptionManager {
     static String CHANNEL_B_STRING = "B";
 
     boolean allOptionsOk = false;
+    String problemMessage = "";
     Mode selectedMode = null;
     Channel selectedChannel = null;
     String selectedFileNameIn = null;
@@ -28,81 +29,75 @@ public class OptionManager {
     }
 
     public OptionManager(String[] args){
-        Options optionsHelp= new Options();
-        optionsHelp.addRequiredOption("h","help", false , "Help for this program");
-
-
         Options options = new Options();
-        options.addRequiredOption("m", "mode", true, "The mode to run the application (encrypt or decrypt or generate)")
-                .addRequiredOption("f", "file", true, "The file to decrypt from or encrypt to depending on the mode")
-                .addRequiredOption("o","fileOut", true , "The file name to create")
+        options.addOption("m", "mode", true, "The mode to run the application (encrypt or decrypt or generate)")
+                .addOption("f", "file", true, "The file to decrypt from or encrypt to depending on the mode")
+                .addOption("o","fileOut", true , "The file name to create")
                 .addOption("k","key",true,"JSON File containing the channel pattern to encrypt with")
+                .addOption("h","help", false , "Help for this program")
                 .addOption("c", "channel", true, "Channel to encrypt into or read from (R, G or B)");
 
         CommandLineParser parser = new DefaultParser();
 
-        try {
-            CommandLine cmd = parser.parse(optionsHelp, args);
-            if(cmd.hasOption("h")) {
-                HelpFormatter formatter = new HelpFormatter();
-                formatter.printHelp("ImageEncrypter", options);
-                return;
-            }
-        } catch (Exception e){
-            System.out.println("HELP PARSE EXCEPTION: "+e.getMessage());
-            allOptionsOk = false;
-        }
-
         try{
             CommandLine cmd = parser.parse(options, args);
 
-            String mode = cmd.getOptionValue("m");
-            if(mode.equals(MODE_DECRYPT_STRING) || mode.equals(MODE_DECRYPT_STRING_SHORT)){
-                selectedMode = Mode.DECRYPT;
-            } else if(mode.equals(MODE_ENCRYPT_STRING) || mode.equals(MODE_ENCRYPT_STRING_SHORT)){
-                selectedMode = Mode.ENCRYPT;
-            } else if(mode.equals(MODE_GENERATE_STRING) || mode.equals(MODE_GENERATE_STRING_SHORT)){
-                selectedMode = Mode.GENERATE;
-            }else {
-                allOptionsOk = false;
-                return;
-            }
-
-            selectedFileNameIn = cmd.getOptionValue("f");
-            if(selectedFileNameIn == null){
-                allOptionsOk = false;
-                return;
-            }
-
-            selectedFileNameOut = cmd.getOptionValue("o");
-            if(selectedFileNameOut == null){
-                allOptionsOk = false;
-                return;
-            }
-
-            String channelFirst = cmd.getOptionValue("c");
-            String displayChannel = "";
-            if(channelFirst != null){
-                if(channelFirst.equals(CHANNEL_R_STRING)){
-                    selectedChannel = Channel.RED;
-                } else if(channelFirst.equals(CHANNEL_G_STRING)){
-                    selectedChannel = Channel.GREEN;
-                } else if(channelFirst.equals(CHANNEL_B_STRING)) {
-                    selectedChannel = Channel.BLUE;
-                }
-                displayChannel = ", Channel to use: "+selectedChannel;
+            if(cmd.hasOption("h") || args.length == 0) {
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("ImageEncrypter", options);
+                System.exit(0);
             } else {
-                selectedChannel = Channel.NOPE;
-            }
+                String mode = cmd.getOptionValue("m");
+                if(mode.equals(MODE_DECRYPT_STRING) || mode.equals(MODE_DECRYPT_STRING_SHORT)){
+                    selectedMode = Mode.DECRYPT;
+                } else if(mode.equals(MODE_ENCRYPT_STRING) || mode.equals(MODE_ENCRYPT_STRING_SHORT)){
+                    selectedMode = Mode.ENCRYPT;
+                } else if(mode.equals(MODE_GENERATE_STRING) || mode.equals(MODE_GENERATE_STRING_SHORT)){
+                    selectedMode = Mode.GENERATE;
+                }else {
+                    allOptionsOk = false;
+                    problemMessage = "No Mode was supplied";
+                    return;
+                }
 
-            selectedKeyFile = cmd.getOptionValue("k");
-            String displayKey = "";
-            if(selectedKeyFile != null){
-                displayKey = ", Using Key File: "+selectedKeyFile;
-            }
+                selectedFileNameIn = cmd.getOptionValue("f");
+                if(selectedFileNameIn == null){
+                    problemMessage = "No Input file was supplied";
+                    allOptionsOk = false;
+                    return;
+                }
 
-            System.out.println("===> Mode: "+mode+" and File in: "+selectedFileNameIn+" and File out: "+ selectedFileNameOut+""+displayChannel+""+displayKey);
-        allOptionsOk = true;
+                selectedFileNameOut = cmd.getOptionValue("o");
+                if(selectedFileNameOut == null){
+                    problemMessage = "No Output file was supplied";
+                    allOptionsOk = false;
+                    return;
+                }
+
+                String channelFirst = cmd.getOptionValue("c");
+                String displayChannel = "";
+                if(channelFirst != null){
+                    if(channelFirst.equals(CHANNEL_R_STRING)){
+                        selectedChannel = Channel.RED;
+                    } else if(channelFirst.equals(CHANNEL_G_STRING)){
+                        selectedChannel = Channel.GREEN;
+                    } else if(channelFirst.equals(CHANNEL_B_STRING)) {
+                        selectedChannel = Channel.BLUE;
+                    }
+                    displayChannel = ", Channel to use: "+selectedChannel;
+                } else {
+                    selectedChannel = Channel.NOPE;
+                }
+
+                selectedKeyFile = cmd.getOptionValue("k");
+                String displayKey = "";
+                if(selectedKeyFile != null){
+                    displayKey = ", Using Key File: "+selectedKeyFile;
+                }
+
+                System.out.println("===> Mode: "+mode+" and File in: "+selectedFileNameIn+" and File out: "+ selectedFileNameOut+""+displayChannel+""+displayKey);
+                allOptionsOk = true;
+            }
         } catch (Exception e){
             System.out.println("ERROR: "+e.getMessage());
             allOptionsOk = false;

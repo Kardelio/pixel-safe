@@ -28,6 +28,7 @@ public class App {
             }
         } else {
             System.out.println("Option Manager reported a problem");
+            System.out.println(optMan.problemMessage);
             outCode = 1;
         }
         System.exit(outCode);
