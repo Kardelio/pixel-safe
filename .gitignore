@@ -2,6 +2,8 @@ build
 out
 .gradle
 
+.idea
+
 pixel-safe.iws
 pixel-safe.iml
 pixel-safe.ipr
