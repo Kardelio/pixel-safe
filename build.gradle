@@ -46,6 +46,7 @@ dependencies {
 mainClassName = 'App'
 
 task fatJar(type: Jar) {
+    description = "Packages a complete JAR file"
     manifest {
         attributes 'Implementation-Title': 'Encrypt files into images and back again',
                 'Implementation-Version': version,
@@ -57,11 +58,13 @@ task fatJar(type: Jar) {
 }
 
 task copyJar(type: Copy) {
+    description = "Copy the created JAR file from /build/libs/ to /example/"
     from file("${buildDir}/libs/${project.name}-${version}.jar")
     into file("${projectDir}/example")
 }
 
 task superBuild(dependsOn: ['clean', 'build', 'fatJar', 'copyJar']){
+    description = "Cleans, Builds and creates a complete release JAR file"
     build.mustRunAfter clean
     fatJar.mustRunAfter build
     copyJar.mustRunAfter fatJar
